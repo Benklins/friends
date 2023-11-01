@@ -7,13 +7,13 @@ plugins {
 val compose_version = "1.2.0"
 
 android {
-    compileSdk = 33
+    compileSdk = 34
     namespace = "com.tdd.friends"
 
     defaultConfig {
         applicationId = "com.tdd.friends"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -23,11 +23,26 @@ android {
         }
     }
 
+    signingConfigs {
+
+        create("release") {
+            storeFile = file(System.getenv("HOME") + "/keyStore/friendsKeystoreFile")
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("FRIENDS_KEY_ALIAS")
+            keyPassword = System.getenv("FRIENDS_KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.getByName("release")
         }
+
     }
 
     compileOptions {
@@ -52,8 +67,8 @@ android {
             exclude("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
-    testOptions.unitTests.all{
-        it.testLogging{
+    testOptions.unitTests.all {
+        it.testLogging {
             events("passed", "failed", "skipped", "standardOut", "standardError")
         }
 
