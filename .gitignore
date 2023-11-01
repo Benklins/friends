@@ -2,6 +2,7 @@
 
  build/
  *.apk
+ **.aab
  output.json
 
 # Local Configuration file (sdk path, etc)
